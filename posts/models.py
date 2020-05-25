@@ -1,12 +1,15 @@
 from django.db import models
+
 from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
+
 class Group(models.Model):
-    title = models.CharField(max_length = 200, verbose_name='Сообщество')
+    title = models.CharField('Сообщество', max_length = 200)
     slug = models.SlugField(unique=True)
-    description = models.TextField(verbose_name='Описание')
+    description = models.TextField('Описание')
 
     class Meta:
         verbose_name_plural = 'Сообщества'
@@ -18,15 +21,19 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    text = models.TextField(verbose_name='Содержание', blank=True, null=True)
-    pub_date = models.DateTimeField(verbose_name='Опубликовано', auto_now_add = True)
+    text = models.TextField('Содержание', blank=True, null=True)
+    pub_date = models.DateTimeField('Опубликовано', auto_now_add = True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', verbose_name='Автор')
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, related_name='posts', blank=True, null=True, verbose_name='Сообщество')
+    group = models.ForeignKey(
+        Group, 
+        on_delete=models.SET_NULL, 
+        related_name='posts', 
+        blank=True, null=True, 
+        verbose_name='Сообщество'
+        )
 
     class Meta:
         verbose_name_plural = 'Посты'
         verbose_name = 'Пост'
         ordering = ['-pub_date']
-
-
-
+        
